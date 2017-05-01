@@ -197,30 +197,19 @@ namespace MentalPoker
             }
         }
 
-        // Picks a prime field, and corresponding generator to create a bit commitment for a secret number
-        //      Returns a tuple that contains <The prime field, the generator for the field, and the commitment number>
-        //      The commitment number, c, is the solution to the following equation: (g ^ secret) mod prime = c
-        public static Tuple<BigInteger, BigInteger, BigInteger> BitCommit(BigInteger secret)
+        // Retrieves a number of primitives roots in a given field
+        public static List<BigInteger> GetPrimitiveRoots(BigInteger field, BigInteger number)
         {
-            var rng = RandomNumberGenerator.Create();
-            byte[] hope = new byte[4];
-            rng.GetBytes(hope);
-            BigInteger prime = new BigInteger(hope);
-            if (prime < 0)
-                prime = -prime;
+            List<BigInteger> roots = new List<BigInteger>();
 
-            while (!IsPrime(prime))
-                prime++;
-
-            List<Tuple<BigInteger, BigInteger>> factorization = PrimeFactorization(prime - 1);
-            BigInteger generator = 2;
+            List<Tuple<BigInteger, BigInteger>> factorization = PrimeFactorization(field - 1);
 
             bool flag = true;
-            for (BigInteger g = 2; g < prime; g++)
+            for (BigInteger g = 2; g < field; g++)
             {
                 for (int i = 0; i < factorization.Count; i++)
                 {
-                    flag &= (BigInteger.ModPow(g, (int)((prime - 1) / factorization[i].Item1), prime) != 1);
+                    flag &= (BigInteger.ModPow(g, ((field - 1) / factorization[i].Item1), field) != 1);
                     if (!flag)
                         break;
                 }
@@ -232,11 +221,35 @@ namespace MentalPoker
                 }
                 else
                 {
-                    generator = g;
-                    break;
+                    roots.Add(g);
+                    number--;
+
+                    if (number <= 0)
+                        return roots;
                 }
             }
 
+            return roots;
+        }
+
+        // Picks a prime field, and corresponding generator to create a bit commitment for a secret number
+        //      Returns a tuple that contains <The prime field, the generator for the field, and the commitment number>
+        //      The commitment number, c, is the solution to the following equation: (g ^ secret) mod prime = c
+        public static Tuple<BigInteger, BigInteger, BigInteger> BitCommit(BigInteger secret)
+        {
+            var rng = RandomNumberGenerator.Create();
+            byte[] hope = new byte[4];
+            rng.GetBytes(hope);
+
+            BigInteger prime = new BigInteger(hope);
+
+            if (prime < 0)
+                prime = -prime;
+
+            while (!IsPrime(prime))
+                prime++;
+
+            BigInteger generator = GetPrimitiveRoots(prime, 1)[0];
             BigInteger c = BigInteger.ModPow(generator, (int)secret, prime);
 
             return new Tuple<BigInteger, BigInteger, BigInteger>(prime, generator, c);
