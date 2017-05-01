@@ -107,6 +107,10 @@ namespace MentalPoker
         }
 
         // The Extended GCD algorithm to find the inverses of numbers in a field
+        // Returns (x, y, r) such that:
+        //      x is the multiplicative inverse of a in the field of b
+        //      y is the multiplicative inverse of b in the field of a
+        //      r is the GCD of a and b
         public static Tuple<BigInteger, BigInteger, BigInteger> ExtendedGCD(BigInteger a, BigInteger b)
         {
             BigInteger s = 0;
@@ -138,6 +142,8 @@ namespace MentalPoker
         }
 
         // Knuth shuffle for a random permutation
+        //      Generates a random permutation of n elements within the input sequence
+        //      (So typically n should be the length of the sequence)
         public static int[] RandomPermutation(int n, int[] sequence)
         {
             Random rand = new Random();
@@ -154,6 +160,7 @@ namespace MentalPoker
         }
 
         // A really not optimized PrimeFactorization algorithm, that also really only works with small numbers
+        //      Returns a list of Tuples that are in the format <Prime factor, exponent>
         public static List<Tuple<BigInteger, BigInteger>> PrimeFactorization(BigInteger n)
         {
             List<Tuple<BigInteger, BigInteger>> factors = new List<Tuple<BigInteger, BigInteger>>();
@@ -191,6 +198,8 @@ namespace MentalPoker
         }
 
         // Picks a prime field, and corresponding generator to create a bit commitment for a secret number
+        //      Returns a tuple that contains <The prime field, the generator for the field, and the commitment number>
+        //      The commitment number, c, is the solution to the following equation: (g ^ secret) mod prime = c
         public static Tuple<BigInteger, BigInteger, BigInteger> BitCommit(BigInteger secret)
         {
             var rng = RandomNumberGenerator.Create();
@@ -234,6 +243,7 @@ namespace MentalPoker
         }
     }
 
+    // Class that represents the card matrix in Practical Mental Poker
     public class CardMatrix
     {
         public int Zprime;
@@ -250,6 +260,7 @@ namespace MentalPoker
             Matrix = buildMatrix();
         }
 
+        // Initializes a new card matrix by picking a random shuffle of the deck and filling in all of the elements of the matrix
         private int[,] buildMatrix()
         {
             int[,] permutationMatrix = new int[52, 52];
@@ -329,6 +340,7 @@ namespace MentalPoker
         }
     }
 
+    // A simple homomorphic encryptor
     public class HomomorphicEncryptor
     {
         public int d = 3;
@@ -344,6 +356,9 @@ namespace MentalPoker
             constructR(m);
         }
 
+        // Generates M and M'
+        //      M > 10 ^ 100
+        //      M' ~ 256 ^ 6
         private void constructM()
         {
             BigInteger upperBound = BigInteger.Pow(10, 200);
@@ -372,6 +387,8 @@ namespace MentalPoker
             this.m_ = factors[0] * factors[1] * factors[2];
         }
 
+        // Chooses a number R such that R has an inverse
+        //      (And it finds said inverse)
         private void constructR(BigInteger m)
         {
             var rng = RandomNumberGenerator.Create();
@@ -402,6 +419,7 @@ namespace MentalPoker
             }
         }
 
+        // Randomly splits the input number into 3 chunks
         private List<BigInteger> split(BigInteger a)
         {
             List<BigInteger> toReturn = new List<BigInteger>();

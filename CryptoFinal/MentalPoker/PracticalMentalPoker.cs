@@ -8,6 +8,7 @@ namespace MentalPoker
 {
     public class PracticalMentalPoker
     {
+        // Unfinished implementation of the DNC
         public class DNC
         {
             public class Link
@@ -30,6 +31,6 @@ namespace MentalPoker
 
         public DNC dnc;
 
-
+        // Here we could put methods that combine all of the Utility methods to get estimates of running times
     }
 }

@@ -250,3 +250,7 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+CryptoFinal/MentalPoker/obj/Debug/
+
+*.exe

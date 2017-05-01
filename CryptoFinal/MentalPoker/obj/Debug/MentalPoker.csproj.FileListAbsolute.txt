@@ -1,8 +1,0 @@
-c:\users\will\documents\visual studio 2015\Projects\CryptoFinal\MentalPoker\bin\Debug\MentalPoker.exe.config
-C:\Users\Will\documents\visual studio 2015\Projects\CryptoFinal\MentalPoker\bin\Debug\MentalPoker.exe
-C:\Users\Will\documents\visual studio 2015\Projects\CryptoFinal\MentalPoker\bin\Debug\MentalPoker.pdb
-C:\Users\Will\documents\visual studio 2015\Projects\CryptoFinal\MentalPoker\obj\Debug\MentalPoker.csprojResolveAssemblyReference.cache
-C:\Users\Will\documents\visual studio 2015\Projects\CryptoFinal\MentalPoker\obj\Debug\MentalPoker.exe
-C:\Users\Will\documents\visual studio 2015\Projects\CryptoFinal\MentalPoker\obj\Debug\MentalPoker.pdb
-C:\Users\Will\Documents\Visual Studio 2015\Projects\CryptoFinal\MentalPoker\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Will\Documents\Visual Studio 2015\Projects\CryptoFinal\MentalPoker\bin\Debug\Newtonsoft.Json.xml
