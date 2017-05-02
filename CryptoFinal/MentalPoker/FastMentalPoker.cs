@@ -15,6 +15,8 @@ namespace MentalPoker
 
         public static double AvgSetupTime;
         public static double AvgShuffleTime;
+        public static double VarSetup;
+        public static double VarShuffle;
 
         // Mock's the setup protocol
         public static void MockSetup(int primeSize, int tries)
@@ -63,6 +65,12 @@ namespace MentalPoker
             totalTime /= runtimes.Count;
             AvgSetupTime = totalTime;
 
+            double variance = 0;
+            foreach (double t in runtimes)
+                variance += Math.Pow(t - AvgSetupTime, 2);
+            variance /= runtimes.Count;
+            VarSetup = Math.Sqrt(variance);
+
             //Console.WriteLine("Done. " + AvgSetupTime + "ms, average runtime.");
         }
 
@@ -106,6 +114,12 @@ namespace MentalPoker
 
             totalTime /= runtimes.Count;
             AvgShuffleTime = totalTime;
+
+            double variance = 0;
+            foreach (double t in runtimes)
+                variance += Math.Pow(t - AvgShuffleTime, 2);
+            variance /= runtimes.Count;
+            VarShuffle = Math.Sqrt(variance);
         }
 
         // Runs both the mock setup and mock shuffle together
@@ -115,7 +129,9 @@ namespace MentalPoker
             MockShuffle(tries);
 
             Console.WriteLine("Average setup time: " + AvgSetupTime + "ms");
+            Console.WriteLine("Standard deviation of setup time: " + VarSetup + "ms");
             Console.WriteLine("Average shuffle time: " + AvgShuffleTime + "ms");
+            Console.WriteLine("Standard deviation of shuffle time: " + VarShuffle + "ms");
             Console.WriteLine("Total run time of initialization protocol: " + (AvgSetupTime + AvgShuffleTime) + "ms");
         }
     }
