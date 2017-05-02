@@ -13,7 +13,7 @@ namespace MentalPoker
         static void Main(string[] args)
         {
 
-            FastMentalPoker.MockSetup(4, 100);
+            FastMentalPoker.MockInitialization(3, 100);
             
             Console.ReadKey();
             
