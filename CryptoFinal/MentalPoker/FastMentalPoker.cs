@@ -10,35 +10,77 @@ namespace MentalPoker
 {
     class FastMentalPoker
     {
+        public static List<BigInteger> cards;
+        public static BigInteger G;
+
+        public static double AvgSetupTime;
+        public static double AvgShuffleTime;
+
         // Mock's the setup protocol
-        public static void MockSetup()
+        public static void MockSetup(int primeSize, int tries)
         {
-            DateTime start = DateTime.Now;
-            Console.WriteLine("Starting the mock setup. " + start);
+            Console.WriteLine("Starting the mock setup. " + tries + " trials, 256 ^ " + primeSize + " field size");
+            List<double> runtimes = new List<double>();
 
-            // Select a large prime
-            byte[] chunk = new byte[3];
+            for (int i = 0; i < tries; i++)
+            {
+                DateTime start = DateTime.Now;    
+
+                // Select a large prime
+                byte[] chunk = new byte[primeSize];
+                var rng = RandomNumberGenerator.Create();
+                rng.GetBytes(chunk);
+                BigInteger field = new BigInteger(chunk);
+
+                if (field < 0)
+                    field = -field;
+
+                while (!Utilities.IsPrime(field))
+                    field++;
+
+                G = field;
+
+                DateTime end1 = DateTime.Now;
+                double t = (end1.Subtract(start)).TotalMilliseconds;
+                Console.WriteLine("Selected a large prime. " + t + "ms");
+
+                // Find 52 distinct primitive roots
+                List<BigInteger> generators = Utilities.GetPrimitiveRoots(field, 52);
+                cards = generators;
+
+                DateTime end2 = DateTime.Now;
+                t = (end2.Subtract(end1)).TotalMilliseconds;
+                Console.WriteLine("Got 52 primitive roots in the field. " + t + "ms");
+
+                t = (end2.Subtract(start)).TotalMilliseconds;
+                runtimes.Add(t);
+            }
+
+            double totalTime = 0;
+            foreach (double t in runtimes)
+                totalTime += t;
+
+            totalTime /= runtimes.Count;
+            AvgSetupTime = totalTime;
+
+            Console.WriteLine("Done. " + AvgSetupTime + "ms, average runtime.");
+        }
+
+        // Mocks the shuffle step that each player takes in the Fast Mental Poker paper
+        public static void MockShuffle()
+        {
+            int size = (int)(BigInteger.Log(G) / BigInteger.Log(256));
+            byte[] secret = new byte[size];
             var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(chunk);
-            BigInteger field = new BigInteger(chunk);
+            rng.GetBytes(secret);
 
-            if (field < 0)
-                field = -field;
+            // Get a random secret integer < G
+            BigInteger x = new BigInteger(secret);
 
-            while (!Utilities.IsPrime(field))
-                field++;
+            if (x < 0)
+                x = -x;
 
-            DateTime end1 = DateTime.Now;
-            Console.WriteLine("Selected a large prime. " + (end1.Subtract(start)).TotalMilliseconds + "ms");
-
-            // Find 52 distinct primitive roots
-            List<BigInteger> generators = Utilities.GetPrimitiveRoots(field, 52);
-
-            DateTime end2 = DateTime.Now;
-            Console.WriteLine("Got 52 primitive roots in the field. " + (end2.Subtract(end1)).TotalMilliseconds + "ms");
-
-            Console.WriteLine("Done.");
-            
+            // Get a random permutation of the deck
         }
     }
 }

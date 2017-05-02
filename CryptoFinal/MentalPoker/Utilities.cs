@@ -85,7 +85,7 @@ namespace MentalPoker
             int size = (int)(BigInteger.Log(n) / BigInteger.Log(256));
 
             // If the number is too small, just do a more simple prime test
-            if (size < 4)
+            if (size < 3)
                 return isPrime((int)n);
 
             byte[] randomWitness = new byte[size - 2];
@@ -144,14 +144,14 @@ namespace MentalPoker
         // Knuth shuffle for a random permutation
         //      Generates a random permutation of n elements within the input sequence
         //      (So typically n should be the length of the sequence)
-        public static int[] RandomPermutation(int n, int[] sequence)
+        public static BigInteger[] RandomPermutation(int n, BigInteger[] sequence)
         {
             Random rand = new Random();
 
             for (int i = 0; i < n - 1; i++)
             {
                 int j = rand.Next(n - i);
-                int t = sequence[i];
+                BigInteger t = sequence[i];
                 sequence[i] = sequence[i + j];
                 sequence[i + j] = t;
             }
@@ -259,10 +259,10 @@ namespace MentalPoker
     // Class that represents the card matrix in Practical Mental Poker
     public class CardMatrix
     {
-        public int Zprime;
-        public int[,] Matrix;
+        public BigInteger Zprime;
+        public BigInteger[,] Matrix;
 
-        public CardMatrix(int prime)
+        public CardMatrix(BigInteger prime)
         {
             Zprime = prime;
 
@@ -274,16 +274,16 @@ namespace MentalPoker
         }
 
         // Initializes a new card matrix by picking a random shuffle of the deck and filling in all of the elements of the matrix
-        private int[,] buildMatrix()
+        private BigInteger[,] buildMatrix()
         {
-            int[,] permutationMatrix = new int[52, 52];
-            int[] cards = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+            BigInteger[,] permutationMatrix = new BigInteger[52, 52];
+            BigInteger[] cards = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
                             14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
                             27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
                             40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52 };
 
             // Select a random permutation
-            int[] chosenPerm = Utilities.RandomPermutation(52, cards);
+            BigInteger[] chosenPerm = Utilities.RandomPermutation(52, cards);
             Random rand = new Random();
 
             // Assign a card to a random slot in each row of the matrix
@@ -297,18 +297,18 @@ namespace MentalPoker
             for (int i = 0; i < permutationMatrix.GetLength(0); i++)
             {
                 for (int j = 0; j < permutationMatrix.GetLength(1); j++)
-                    permutationMatrix[i, j] += Zprime * rand.Next(int.MaxValue / Zprime);
+                    permutationMatrix[i, j] += Zprime * rand.Next((int)Zprime);
             }
 
             return permutationMatrix;
         }
 
         // Retrieves the card from an input row
-        public int GetCard(int index)
+        public BigInteger GetCard(int index)
         {
             for (int i = 0; i < Matrix.GetLength(1); i++)
             {
-                int card = (Matrix[index, i] % Zprime);
+                BigInteger card = (Matrix[index, i] % Zprime);
                 if (card != 0)
                     return card;
             }
@@ -332,7 +332,7 @@ namespace MentalPoker
             for (int i = 0; i < Matrix.GetLength(0); i++)
             {
                 for (int j = 0; j < Matrix.GetLength(1); j++)
-                    Matrix[i, j] += Zprime * rand.Next(int.MaxValue / Zprime);
+                    Matrix[i, j] += Zprime * rand.Next((int)Zprime);
             }
         }
 
