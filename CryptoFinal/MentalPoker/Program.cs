@@ -13,10 +13,7 @@ namespace MentalPoker
         static void Main(string[] args)
         {
 
-            HomomorphicEncryptor h = new HomomorphicEncryptor();
-
-            List<BigInteger> e = h.Encrypt(BigInteger.Pow(2, 32));
-            Console.WriteLine(h.Decrypt(e));
+            FastMentalPoker.MockInitialization(4, 100);
             
             Console.ReadKey();
             
