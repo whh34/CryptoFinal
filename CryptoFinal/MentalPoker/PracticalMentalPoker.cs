@@ -44,7 +44,7 @@ namespace MentalPoker
                 DateTime start = DateTime.Now;
 
                 // Select a large prime
-                byte[] chunk = new byte[3];
+                byte[] chunk = new byte[primeSize];
                 var rng = RandomNumberGenerator.Create();
                 rng.GetBytes(chunk);
                 BigInteger field = new BigInteger(chunk);
