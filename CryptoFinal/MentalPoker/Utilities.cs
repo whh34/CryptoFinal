@@ -297,7 +297,7 @@ namespace MentalPoker
             for (int i = 0; i < permutationMatrix.GetLength(0); i++)
             {
                 for (int j = 0; j < permutationMatrix.GetLength(1); j++)
-                    permutationMatrix[i, j] += Zprime * rand.Next((int)Zprime);
+                    permutationMatrix[i, j] += Zprime * rand.Next(5);
             }
 
             return permutationMatrix;
@@ -332,7 +332,7 @@ namespace MentalPoker
             for (int i = 0; i < Matrix.GetLength(0); i++)
             {
                 for (int j = 0; j < Matrix.GetLength(1); j++)
-                    Matrix[i, j] += Zprime * rand.Next((int)Zprime);
+                    Matrix[i, j] += Zprime * rand.Next(5);
             }
         }
 
