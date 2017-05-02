@@ -78,7 +78,7 @@ namespace MentalPoker
         public static void MockShuffle(int tries)
         {
             List<double> runtimes = new List<double>();
-
+            
             for (int i = 0; i < tries; i++)
             {
                 DateTime start = DateTime.Now;
