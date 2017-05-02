@@ -371,35 +371,33 @@ namespace MentalPoker
 
         // Generates M and M'
         //      M > 10 ^ 100
-        //      M' ~ 256 ^ 10
+        //      M' > 10 ^ 40
         private void constructM()
         {
-            BigInteger upperBound = BigInteger.Pow(10, 200);
-            BigInteger lowerBound = BigInteger.Pow(10, 100);
+            BigInteger m_Bound = BigInteger.Pow(10, 40);
+            BigInteger mBound = BigInteger.Pow(10, 100);
 
             BigInteger m = 1;
-            BigInteger[] factors = new BigInteger[5];
+            BigInteger m_ = 1;
 
             byte[] multiplier = new byte[2];
             var rng = RandomNumberGenerator.Create();
             rng.GetBytes(multiplier);
 
-            while (m < lowerBound && m < upperBound)
+            while (m < mBound)
             {
                 BigInteger temp = new BigInteger(multiplier);
 
                 m *= temp;
-                factors[4] = factors[3];
-                factors[3] = factors[2];
-                factors[2] = factors[1];
-                factors[1] = factors[0];
-                factors[0] = temp;
+                
+                if (m_ < m_Bound)
+                    m_ *= temp;
 
                 rng.GetBytes(multiplier);
             }
 
             this.m = m;
-            this.m_ = factors[0] * factors[1] * factors[2] * factors[3] * factors[4];
+            this.m_ = m_;
         }
 
         // Chooses a number R such that R has an inverse
